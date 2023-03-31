@@ -1,14 +1,13 @@
 package com.example.findyou.ui.login
 
+import android.util.Patterns
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import android.util.Patterns
+import com.example.findyou.R
 import com.example.findyou.data.LoginRepository
 import com.example.findyou.data.Result
-
-import androidx.fragment.app.FragmentManager
-import com.example.findyou.R
 import com.example.findyou.registration.Registration
 
 class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
@@ -31,15 +30,15 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
         }
     }
 
-    fun registration(){
         // can be launched in a separate asynchronous job
+        fun registration(fragmentTransaction: FragmentTransaction) {
 
-        val fragmentManager = supportFragmentManager
 
-        fragmentManager.beginTransaction()
-            .replace(R.id.container, Registration)
-            .commit()
-    }
+            fragmentTransaction.replace(R.id.container, Registration())
+            fragmentTransaction.addToBackStack(null)
+            fragmentTransaction.commit()
+        }
+
 
     fun loginDataChanged(username: String, password: String) {
         if (!isUserNameValid(username)) {

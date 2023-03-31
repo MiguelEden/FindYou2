@@ -14,6 +14,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import com.example.findyou.databinding.ActivityLoginBinding
 
 import com.example.findyou.R
@@ -100,8 +101,12 @@ class LoginActivity : AppCompatActivity() {
             }
 
             registration?.setOnClickListener {
-                loading.visibility = View.VISIBLE
-                loginViewModel.registration()
+                val fragmentManager = supportFragmentManager
+                val fragmentTransaction = fragmentManager.beginTransaction()
+
+//                loading.visibility = View.VISIBLE
+                loginViewModel.registration(fragmentTransaction)
+
             }
         }
 

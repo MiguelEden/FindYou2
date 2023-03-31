@@ -3,6 +3,7 @@
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
+    <string name="prompt_repeat_password">Repeat password</string>
     <string name="sign_in">Sign</string>
     <string name="register">register</string>
     <string name="action_sign_in_short">Sign in</string>
