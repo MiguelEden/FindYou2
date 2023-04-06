@@ -1,6 +1,11 @@
 package com.example.findyou.ui.login
 
+import android.content.Intent
 import android.util.Patterns
+import android.view.WindowManager
+import androidx.core.content.ContextCompat.startActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -31,12 +36,14 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
     }
 
         // can be launched in a separate asynchronous job
-        fun registration(fragmentTransaction: FragmentTransaction) {
+        fun registration(intent: Intent) {
 
 
-            fragmentTransaction.replace(R.id.container, Registration())
-            fragmentTransaction.addToBackStack(null)
-            fragmentTransaction.commit()
+            //per Fragment
+//            FragmentActivity.requireActivity().window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+//            fragmentTransaction.replace(R.id.container, Registration())
+//            fragmentTransaction.addToBackStack(null)
+//            fragmentTransaction.commit()
         }
 
 

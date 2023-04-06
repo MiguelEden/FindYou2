@@ -1,23 +1,22 @@
 package com.example.findyou.ui.login
 
 import android.app.Activity
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import android.content.Intent
 import android.os.Bundle
-import android.telephony.ims.RegistrationManager.RegistrationCallback
-import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import com.example.findyou.databinding.ActivityLoginBinding
-
+import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.example.findyou.R
+import com.example.findyou.databinding.ActivityLoginBinding
+import com.example.findyou.registration.Registration
+
 
 class LoginActivity : AppCompatActivity() {
 
@@ -101,11 +100,16 @@ class LoginActivity : AppCompatActivity() {
             }
 
             registration?.setOnClickListener {
-                val fragmentManager = supportFragmentManager
-                val fragmentTransaction = fragmentManager.beginTransaction()
+
+                val intent = Intent(applicationContext, Registration::class.java)
+                startActivity(intent)
+//                val fragmentManager = supportFragmentManager
+//                val fragmentTransaction = fragmentManager.beginTransaction()
+
+
 
 //                loading.visibility = View.VISIBLE
-                loginViewModel.registration(fragmentTransaction)
+//                loginViewModel.registration(intentToRegistration)
 
             }
         }
