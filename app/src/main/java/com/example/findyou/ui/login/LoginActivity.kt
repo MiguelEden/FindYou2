@@ -16,12 +16,17 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.findyou.R
 import com.example.findyou.databinding.ActivityLoginBinding
 import com.example.findyou.registration.Registration
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.login.widget.LoginButton
 
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var binding: ActivityLoginBinding
+    val EMAIL = "email"
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,11 +34,40 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+//        callbackManager : CallbackManager.Factory.create();
+
         val username = binding.username
         val password = binding.password
         val login = binding.login
         val registration = binding.registrationButton
         val loading = binding.loading
+
+        val loginButtonFacebook = binding.loginButtonFacebook
+
+
+
+        loginButtonFacebook.setReadPermissions(Arrays.asList(EMAIL))
+
+        // If you are using in a fragment, call loginButton.setFragment(this);
+
+        // Callback registration
+        // If you are using in a fragment, call loginButton.setFragment(this);
+
+        // Callback registration
+        loginButton.registerCallback(callbackManager, object : FacebookCallback<LoginResult?> {
+            fun onSuccess(loginResult: LoginResult) {
+                // App code
+
+            }
+
+            override fun onCancel() {
+                // App code
+            }
+
+            override fun onError(exception: FacebookException) {
+                // App code
+            }
+        })
 
         loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
             .get(LoginViewModel::class.java)
@@ -149,3 +183,4 @@ class LoginActivity : AppCompatActivity() {
         })
     }
 }
+
