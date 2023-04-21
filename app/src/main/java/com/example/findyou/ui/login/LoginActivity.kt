@@ -16,17 +16,21 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.findyou.R
 import com.example.findyou.databinding.ActivityLoginBinding
 import com.example.findyou.registration.Registration
-import com.facebook.FacebookCallback
-import com.facebook.FacebookException
-import com.facebook.login.widget.LoginButton
+import com.facebook.*
+import com.facebook.CallbackManager.Factory.create
+import com.facebook.appevents.AppEventsLogger
 
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var binding: ActivityLoginBinding
-    val EMAIL = "email"
+    private var callbackManager = create()
 
+    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+        super.onActivityResult(requestCode, resultCode, data)
+        callbackManager.onActivityResult(requestCode, resultCode, data)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,30 +48,60 @@ class LoginActivity : AppCompatActivity() {
 
         val loginButtonFacebook = binding.loginButtonFacebook
 
+        FacebookSdk.fullyInitialize();
+        AppEventsLogger.activateApp(application)
 
 
-        loginButtonFacebook.setReadPermissions(Arrays.asList(EMAIL))
+         callbackManager = CallbackManager.Factory.create();
 
-        // If you are using in a fragment, call loginButton.setFragment(this);
+        // Set the initial permissions to request from the user while logging in
+        if (loginButtonFacebook != null) {
+            loginButtonFacebook.permissions= listOf(EMAIL, USER_POSTS)
+        }
+        if (loginButtonFacebook != null) {
+            loginButtonFacebook.authType= AUTH_TYPE
+        }
 
         // Callback registration
         // If you are using in a fragment, call loginButton.setFragment(this);
 
         // Callback registration
-        loginButton.registerCallback(callbackManager, object : FacebookCallback<LoginResult?> {
-            fun onSuccess(loginResult: LoginResult) {
-                // App code
+        // Callback registration
+        if (loginButtonFacebook != null) {
+            loginButtonFacebook.registerCallback(callbackManager, object : FacebookCallback<LoginResult?> {
+                fun onSuccess(loginResult: LoginResult) {
+                    // App code
+                }
 
-            }
+                override fun onCancel() {
+                    // App code
+                }
 
-            override fun onCancel() {
-                // App code
-            }
+                override fun onError(exception: FacebookException) {
+                    // App code
+                }
+            })
+        }
 
-            override fun onError(exception: FacebookException) {
-                // App code
-            }
-        })
+        if (loginButtonFacebook != null) {
+            loginButtonFacebook.registerCallback(
+                callbackManager,
+                object : FacebookCallback<LoginResult> {
+                    override fun onSuccess(result: LoginResult) {
+                        setResult(RESULT_OK)
+                        finish()
+                    }
+
+                    override fun onCancel() {
+                        setResult(RESULT_CANCELED)
+                        finish()
+                    }
+
+                    override fun onError(error: FacebookException) {
+                        // Handle exception
+                    }
+                })
+        }
 
         loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
             .get(LoginViewModel::class.java)
@@ -137,13 +171,6 @@ class LoginActivity : AppCompatActivity() {
 
                 val intent = Intent(applicationContext, Registration::class.java)
                 startActivity(intent)
-//                val fragmentManager = supportFragmentManager
-//                val fragmentTransaction = fragmentManager.beginTransaction()
-
-
-
-//                loading.visibility = View.VISIBLE
-//                loginViewModel.registration(intentToRegistration)
 
             }
         }
@@ -182,5 +209,12 @@ class LoginActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
         })
     }
+
+    companion object {
+        private const val EMAIL = "email"
+        private const val USER_POSTS = "user_posts"
+        private const val AUTH_TYPE = "rerequest"
+    }
 }
+
 
